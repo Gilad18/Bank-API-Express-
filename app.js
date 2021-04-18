@@ -13,12 +13,16 @@ app.use(bodyParser.json());
 
 app.use('/api',accountRoute);
 
+app.get('/',(req,res)=>{
+    res.json({success : {id:1,email : 'asfasf@asfasf.com'}})
+})
+
 
 // app.listen(port,()=>{
 //     console.log(`application start at ${port}`)
 // })
 
 
-app.listen(process.env.PORT || port, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log(`application start at ${port}`);
 })
