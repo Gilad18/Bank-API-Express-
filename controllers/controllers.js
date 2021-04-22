@@ -1,6 +1,9 @@
 const dataJSON = require('../accounts.json')
 const fs = require('fs');
 
+const accounts = require('../model/account.model')
+const transacions = require('../model/trasactions.model')
+
 
 const getAccountByPassport = (req) => {
     return dataJSON.accounts.filter(item => item.passport === req)
@@ -13,15 +16,28 @@ const getClientsByAmount = (req,res) => {
     } else {res.status(200).json({ error: 'There are no clients with a balance of the requested amount' })} 
 }
 
-const addNewAccount = (req, res) => {
-    let checkIfExsit = getAccountByPassport(req.params.passport)
-        if(!checkIfExsit[0]) {
-            let tempJSON = dataJSON
-            tempJSON.accounts.push({passport: req.params.passport,cash: 0,credit: 0})
-            fs.writeFileSync('./accounts.json', JSON.stringify(tempJSON))
-            return res.status(200).json({ success: 'new account was successfully created' })
-        }
-     else {res.status(200).json({ error: 'Client already exist' })}
+const addNewAccount = async (req, res) => {
+    // let checkIfExsit = getAccountByPassport(req.params.passport)
+    //     if(!checkIfExsit[0]) {
+    //         let tempJSON = dataJSON
+    //         tempJSON.accounts.push({passport: req.params.passport,cash: 0,credit: 0})
+    //         fs.writeFileSync('./accounts.json', JSON.stringify(tempJSON))
+    //         return res.status(200).json({ success: 'new account was successfully created' })
+    //     }
+    //  else {res.status(200).json({ error: 'Client already exist' })}
+
+     // the Mongo Creation 
+
+     const newAccount = new accounts({
+        passport : req.params.passport
+     });
+
+     try {
+        await newAccount.save()
+        res.status(200).json({"success": newAccount})
+     } catch (e){
+         res.json({"error" : err})
+     }
 }
 
 const deposit = (req, res) => {
