@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 app.use('/api',accountRoute);
 
-mongoose.connect('mongodb+srv://gilad18587:MapileyEgoz85@mybankdatabase.418pd.mongodb.net/test', {
+mongoose.connect('mongodb+srv://gilad18587:MapileyEgoz85@mybankdatabase.418pd.mongodb.net/test?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export default function Thebank() {
-    const {account , setaccount} = useState([])
+      
+        const {data,setData} = useState([])
 
-    useEffect(() => {
-        const search = async () => {
-         const getData = await axios.get('http://bank-gilad.herokuapp.com/api/')
-         setaccount(getData);
-         console.log(getData)
+        useEffect(() => {
+            const search = async () => {
+                const getData = await axios.get('http://bank-gilad.herokuapp.com/api/');
+                console.log(getData)
         }
-        search();
-    }, [account])
-
+        search()
+        },[])
+       
     return (
         <div>
             here the users will be
-            {account}
         </div>
     )
 }
