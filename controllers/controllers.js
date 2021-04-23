@@ -3,7 +3,6 @@ const transacions = require('../model/trasactions.model')
 
 
 const addNewAccount = async (req, res) => {
-    // the Mongo Creation 
 
     const newAccount = new accounts({
        passport : req.params.passport

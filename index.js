@@ -12,7 +12,8 @@ app.use(bodyParser.json());
 
 app.use('/api',accountRoute);
 
-mongoose.connect('mongodb+srv://gilad18587:MapileyEgoz85@mybankdatabase.418pd.mongodb.net/test?retryWrites=true&w=majority', {
+
+mongoose.connect('mongodb+srv://gilad18587:MapileyEgoz85@cluster1.d82yt.mongodb.net/bankApp', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
