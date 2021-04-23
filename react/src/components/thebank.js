@@ -6,16 +6,17 @@ export default function Thebank() {
 
     useEffect(() => {
         const search = async () => {
-         const getData = await axios.get('mongodb+srv://gilad18587:MapileyEgoz85@mybankdatabase.418pd.mongodb.net/test')
+         const getData = await axios.get('http://bank-gilad.herokuapp.com/api/')
          setaccount(getData);
          console.log(getData)
         }
         search();
-    }, [])
+    }, [account])
 
     return (
         <div>
             here the users will be
+            {account}
         </div>
     )
 }
