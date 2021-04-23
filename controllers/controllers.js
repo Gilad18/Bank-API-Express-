@@ -1,97 +1,168 @@
-const dataJSON = require('../accounts.json')
-const fs = require('fs');
-
 const accounts = require('../model/account.model')
 const transacions = require('../model/trasactions.model')
 
 
-const getAccountByPassport = (req) => {
-    return dataJSON.accounts.filter(item => item.passport === req)
-}
-
-const getClientsByAmount = (req,res) => {
-    const selected = dataJSON.accounts.filter(item => item.cash >= parseInt(req.params.amount))
-    if(selected.length>0) {
-        return res.status(200).json(selected)
-    } else {res.status(200).json({ error: 'There are no clients with a balance of the requested amount' })} 
-}
-
 const addNewAccount = async (req, res) => {
-    // let checkIfExsit = getAccountByPassport(req.params.passport)
-    //     if(!checkIfExsit[0]) {
-    //         let tempJSON = dataJSON
-    //         tempJSON.accounts.push({passport: req.params.passport,cash: 0,credit: 0})
-    //         fs.writeFileSync('./accounts.json', JSON.stringify(tempJSON))
-    //         return res.status(200).json({ success: 'new account was successfully created' })
-    //     }
-    //  else {res.status(200).json({ error: 'Client already exist' })}
+    // the Mongo Creation 
 
-     // the Mongo Creation 
+    const newAccount = new accounts({
+       passport : req.params.passport
+    });
 
-     const newAccount = new accounts({
-        passport : req.params.passport
-     });
-
-     try {
-        await newAccount.save()
-        res.status(200).json({"success": newAccount})
-     } catch (e){
-         res.json({"error" : err})
-     }
+    try {
+       await newAccount.save()
+       res.status(200).json({"success": newAccount})
+    } 
+    catch (err){
+        res.json({"error" : err})
+    }
 }
 
-const deposit = (req, res) => {
-        let selected = getAccountByPassport(req.params.passport);
-    if (selected[0]) {
-        selected.map(item => item.cash += parseInt(req.params.amount));
-        fs.writeFileSync('./accounts.json', JSON.stringify(dataJSON));
-        return res.status(200).json({ success: 'Deposit was succesfully made' })
+const getAll = async (req,res) => {
+    try {
+        const data = await accounts.find({})
+        res.send(data)
+    } 
+    catch(err) {
+        res.send(err)
     }
-    else { res.status(200).json({ error: 'Account does not exsist' }) }
 }
 
-const updateCredit = (req, res) => {
-    let selected = getAccountByPassport(req.params.passport);
-    if (selected[0]) {
-        selected.map(item => item.credit = parseInt(req.params.amount));
-        fs.writeFileSync('./accounts.json', JSON.stringify(dataJSON));
-        return res.status(200).json({ success: 'Credit was succesfully updated' })
+const getAccountByPassport = async (req,res) => {
+    const asked = req.params.passport
+    try {
+        const account = await accounts.findOne({passport : asked})
+        if(account) {
+            res.send(account)
+        }else {
+            res.json({error : "Account does not exist"})
+        }
+       
     }
-    else { res.status(200).json({ error: 'Account does not exsist' }) }
+    catch(err) {
+        res.send(err)
+    }
 }
 
-const withdrawl = (req, res) => {
-    let selected = getAccountByPassport(req.params.passport);
-    if (selected[0]) {
-        if (req.params.amount <= selected[0].cash + selected[0].credit) {
-            selected.map(item => item.cash -= req.params.amount)
-            fs.writeFileSync('./accounts.json', JSON.stringify(dataJSON));
-            return res.status(200).json({ success: 'Withdrawal was successfuly made' })
-        } else { res.status(200).json({ error: 'client doesnt have sufficent funds for this action' }) }
-    }
-    else { res.status(200).json({ error: 'Account does not exsist' }) }
+const accountExist = async (passport) => {
+    const account = await accounts.findOne({passport : passport})
+    return account
 }
 
-const transfer = (req,res) => {
-    let sender = getAccountByPassport(req.params.passport1)
-    let reciever = getAccountByPassport(req.params.passport2)
-    if (sender[0] && reciever[0]) {
-        if (req.params.amount <= sender[0].cash + sender[0].credit) {
-            sender.map(item => item.cash -= parseInt(req.params.amount))
-            reciever.map(item => item.cash += parseInt(req.params.amount))
-            fs.writeFileSync('./accounts.json', JSON.stringify(dataJSON));
-            return res.status(200).json({ success: 'Transfer was successfuly made' })
-        } else { res.status(200).json({ error: 'client doesnt have sufficent funds for this action' }) }
-    }
-    else { res.status(200).json({ error: 'One or Two of the accounts not exsist' }) }
+const deposit = async (req, res) => {
+    const askedAccount = req.params.passport
+    const {amount} = req.body
+    const exist = await accountExist(askedAccount);
+    console.log(exist)
+    if (amount>0) {
+        if(exist) {
+            try {
+                await accounts.updateOne({passport: askedAccount}, {$inc: {"balance": amount}});
+                 const newTrasacion =  new transacions({
+                     account : askedAccount,
+                     action : 'Credit',
+                     amount : amount,
+                 })
+                 await newTrasacion.save()
+                 res.send(newTrasacion)
+             }
+             catch(err) {
+                res.send(err)
+             }
+        } else {return res.json({error : "Account does not exist"})}
+       
+    } else {return res.json({error : "Amount must has a positive value"})}
+}
+
+const withdrawl = async (req, res) => {
+    const askedAccount = req.params.passport
+    const {amount} = req.body
+    const exist = await accountExist(askedAccount);
+    if (amount>0) {
+        if(exist) {
+            if(exist.balance + exist.credit >= amount) {
+                try {
+                    await accounts.updateOne({passport: askedAccount}, {$inc: {"balance": -amount}});
+                     const newTrasacion =  new transacions({
+                         account : askedAccount,
+                         action : 'Debit',
+                         amount : amount,
+                     })
+                     await newTrasacion.save()
+                     res.send(newTrasacion)
+                 }
+                 catch(err) {
+                    res.send(err)
+                 }
+            } else {return res.json({error : "Client does not have sufficient funds for this action"})}
+         
+        } else {return res.json({error : "Account does not exist"})}
+       
+    } else {return res.json({error : "Amount must has a positive value"})}
+}
+
+const updateCredit = async (req, res) => {
+    const askedAccount = req.params.passport
+    const {amount} = req.body
+    const exist = await accountExist(askedAccount);
+    if (amount>0) {
+        if(exist) {
+            try {
+                await accounts.updateOne({passport: askedAccount}, {$set: {"credit": amount}});
+                res.json({success : `Credit of ${amount} was updated for Account ${askedAccount}`})
+             }
+             catch(err) {
+                res.send(err)
+             }
+        } else {return res.json({error : "Account does not exist"})}
+       
+    } else {return res.json({error : "Amount must has a positive value"})}
+}
+
+const transfer = async (req,res) => {
+    const askedAccount = req.params.passport
+    const {toAccount ,amount} = req.body
+    const sender = await accountExist(askedAccount);
+    const reciever = await accountExist(toAccount);
+    if (amount>0) {
+        if (sender && reciever) {
+            if(sender.credit + sender.balance >= amount) {
+                try {
+                 await accounts.updateOne({passport: askedAccount}, {$inc: {"balance": -amount}});
+                 await accounts.updateOne({passport: toAccount}, {$inc: {"balance": amount}});
+     
+                 const senderTrasaction =  new transacions({
+                     account : askedAccount,
+                     action : 'Debit',
+                     amount : amount,
+                 })
+     
+                 const reaciveTrasaction =  new transacions({
+                     account : toAccount,
+                     action : 'Credit',
+                     amount : amount,
+                 })
+     
+     
+                 await senderTrasaction.save()
+                 await reaciveTrasaction.save()
+     
+                 res.json({success : `Transfer of ${amount} was made from Account ${askedAccount} to ${toAccount}`})
+     
+                } catch(err) {
+                 res.send(err)
+                }
+            }
+         } else {return res.json({error : "One or Two of the accounts not exist"}) }
+    } else { return res.json({error : "Amount must be with a positive value"})}
 }
 
 module.exports = {
+    getAll,
     getAccountByPassport,
     addNewAccount,
     deposit,
     updateCredit,
     withdrawl,
-    transfer,
-    getClientsByAmount
+    transfer
 }

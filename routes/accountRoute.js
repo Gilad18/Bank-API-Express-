@@ -4,29 +4,19 @@ const dataJSON = require('../accounts.json');
 const controllers = require('../controllers/controllers')
 
 router.get('/', (req,res) => {
-    return res.send(dataJSON.accounts)
+    controllers.getAll(req,res)
 }).get('/accounts/:passport' , (req , res) => {
-    return res.send(controllers.getAccountByPassport(req))
+   controllers.getAccountByPassport(req,res)
 }).post('/:passport' , (req,res) => {
-    if(req.params.passport.length>=6) {
-        controllers.addNewAccount(req,res);
-    } else {res.status(200).json({ error: 'Invalid Passport, must include min 6 chars' })}
-}).put('/accounts/:passport/deposit/:amount' , (req,res) => {
-    if(req.params.amount>0) {
+   controllers.addNewAccount(req,res);
+}).put('/accounts/:passport/deposit/' , (req,res) => {
         controllers.deposit(req,res);
-    } else {res.status(200).json({ error: 'Despoit must be with a positive value' })} 
-}).put('/accounts/:passport/credit/:amount' , (req,res) => {
-    if(req.params.amount>0) {
+}).put('/accounts/:passport/credit/' , (req,res) => {
     controllers.updateCredit(req,res)
-    }else {res.status(200).json({ error: 'Credit must be with a positive value' })} 
-}).put('/accounts/:passport/withdraw/:amount' , (req,res) => {
-    if(req.params.amount>0) {
+}).put('/accounts/:passport/debit/' , (req,res) => {
         controllers.withdrawl(req,res)
-    } else {res.status(200).json({ error: 'Withdrawl must be with a positive value' })} 
-}).put('/accounts/:passport1/transfer/:amount/:passport2',(req,res) => {
-    if(req.params.amount>0){
+}).put('/accounts/:passport/transfer/',(req,res) => {
         controllers.transfer(req,res)
-    }else {res.status(200).json({ error: 'Transfer must be with a positive value' })} 
 }).get('/accounts/search/:amount',(req,res) => {
     controllers.getClientsByAmount(req,res)
 })
