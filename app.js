@@ -18,6 +18,10 @@ mongoose.connect('mongodb+srv://gilad18587:MapileyEgoz85@mybankdatabase.418pd.mo
     console.log("database connect")
 });
 
+app.get('/',(req,res)=>{
+    res.json({success : 'Bank API'})
+})
+
 
 app.listen(process.env.PORT || 5000, () => {
     console.log(`application start`);
