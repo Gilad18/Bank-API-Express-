@@ -11,11 +11,6 @@ const transactionSchema = mongoose.Schema({
         required : true,
         unique : false
     },
-    // preBalance : {
-    //     type : Number,
-    //     required : true,
-    //     unique : false
-    // },
     amount : {
         type : Number,
         required : true,
@@ -26,13 +21,13 @@ const transactionSchema = mongoose.Schema({
         required: false,
         unique: false,
         default: Date.now
+    },
+    comments: {
+     type :String,
+     required :false,
+     unique :false,
+     default : 'No Comment'
     }
-    // ,
-    // postBalance : {
-    //     type : Number,
-    //     required : true,
-    //     unique : false
-    // }
 })
 
 const transactionModel  = mongoose.model('transactions',transactionSchema);

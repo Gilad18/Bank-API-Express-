@@ -1,0 +1,31 @@
+
+.upperPageSingle{
+    width: 100vw;
+    height: 30vh;
+    background-color: ghostwhite;
+    display: flex;
+}
+.accountInfo {
+    width: 25vw;
+    height: 100%;
+    padding: 3rem;
+}
+.accountActions {
+    width: 75vw;
+    height: 100%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.actionSection {
+    width: 100%;
+    height: 30%;
+    /* float: right;
+    position: relative;
+    bottom: 50%;
+    right: 20%; */
+    display: flex;
+    justify-content: space-evenly;
+}

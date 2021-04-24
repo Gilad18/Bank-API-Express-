@@ -16,7 +16,7 @@ export default function Thebank() {
                 setData(getData.data)
         }
         search();
-        },[data])
+        },[])
 
         const createNewAccount = async () => {
             console.log(newPassport);
@@ -31,7 +31,18 @@ export default function Thebank() {
             <Input name="Passport:" type="text" onChange={(e) => setNewPassport(e.target.value)}/>
             <Button name="Add New Account" onClick={createNewAccount}/>
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Passport</th>
+                        <th>Name</th>
+                        <th>Credit Line</th>
+                        <th>Balance</th>
+                        <th>More</th>
+                    </tr>
+                </thead>
             <Table data={data}/>
+            </table>
         </div>
     )
 }

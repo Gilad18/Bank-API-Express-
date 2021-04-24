@@ -3,18 +3,25 @@ const transacions = require('../model/trasactions.model')
 
 
 const addNewAccount = async (req, res) => {
-
-    const newAccount = new accounts({
-       passport : req.params.passport
-    });
-
-    try {
-       await newAccount.save()
-       res.status(200).json({"success": newAccount})
-    } 
-    catch (err){
-        res.json({"error" : err})
-    }
+     if(req.params.passport.length > 5) {
+         const {theName} = req.body 
+         if (theName.length<2) {
+            const newAccount = new accounts({
+                passport : req.params.passport,
+                name :theName
+             });
+         
+             try {
+                await newAccount.save()
+                res.status(200).json({success: "New Account was Succesfully created"})
+             } 
+             catch (err){
+                 res.json({"error" : err})
+             }
+         }  else {return res.json({error : "Please insert a valid name"})}
+       
+     } else {return res.json({error : "Passport must be with a minimun of 6 digits"})}
+   
 }
 
 const getAll = async (req,res) => {
@@ -79,7 +86,7 @@ const deposit = async (req, res) => {
                      amount : amount,
                  })
                  await newTrasacion.save()
-                 res.send(newTrasacion)
+                 res.json({success : `Deposit of ${amount} was updated for account ${askedAccount}`})
              }
              catch(err) {
                 res.send(err)
@@ -104,7 +111,7 @@ const withdrawl = async (req, res) => {
                          amount : amount,
                      })
                      await newTrasacion.save()
-                     res.send(newTrasacion)
+                     res.json({success : `Withdrawal of ${amount} was updated for account ${askedAccount}`})
                  }
                  catch(err) {
                     res.send(err)
@@ -150,12 +157,14 @@ const transfer = async (req,res) => {
                      account : askedAccount,
                      action : 'Debit',
                      amount : amount,
+                     comments : `To ${toAccount}`
                  })
      
                  const reaciveTrasaction =  new transacions({
                      account : toAccount,
                      action : 'Credit',
                      amount : amount,
+                     comments : `From ${askedAccount}`
                  })
      
      

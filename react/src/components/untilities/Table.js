@@ -4,29 +4,18 @@ import './utilities.css'
 
 export default function Table({data}) {
     return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Passport</th>
-                        <th>Name</th>
-                        <th>Credit Line</th>
-                        <th>Balance</th>
-                        <th>More</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <React.Fragment>
+         <tbody  style={{width:'100%'}}>
                     {data.map((item,index) => {
                         return <tr key={index}>
                              <td>{item.passport}</td>
                              <td>/NAME/</td>
                              <td>{item.credit}</td>
-                             <td>{item.balance}</td>
+                             <td style={item.balance>=0?{color:'green'}:{color:'red'}}>{item.balance}</td>
                              <td><Link to={`/account/${item.passport}`}>MORE</Link></td>
                         </tr>
                     })}
                 </tbody>
-            </table>
-        </div>
+                </React.Fragment>
     )
 }
