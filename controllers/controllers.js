@@ -46,7 +46,7 @@ const getAccountByPassport = async (req,res) => {
 const getClientTransactions = async (req,res) => {
     const asked = req.params.passport
     try {
-        const transactions = await transacions.find({passport : asked})
+        const transactions = await transacions.find({account : asked})
         if(transactions) {
             res.send(transactions)
         }else {
