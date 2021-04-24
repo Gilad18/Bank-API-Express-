@@ -1,11 +1,13 @@
 import './App.css';
-import Bank from './components/thebank'
+// import Bank from './components/allAcounts/thebank'
+import Router from '../src/components/Router.js/Router'
+
 
 function App() {
   return (
     <div className="App">
-     HI it me
-     <Bank/>
+     {/* <Bank/> */}
+     <Router/>
     </div>
   );
 }

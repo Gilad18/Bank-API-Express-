@@ -19,6 +19,8 @@ router.get('/', (req,res) => {
         controllers.transfer(req,res)
 }).get('/accounts/search/:amount',(req,res) => {
     controllers.getClientsByAmount(req,res)
+}).get('/accounts/:passport/transactions/' , (req,res) => {
+    controllers.getClientTransactions(req,res)
 })
 
 module.exports = router;

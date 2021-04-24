@@ -43,6 +43,22 @@ const getAccountByPassport = async (req,res) => {
     }
 }
 
+const getClientTransactions = async (req,res) => {
+    const asked = req.params.passport
+    try {
+        const transactions = await transacions.find({passport : asked})
+        if(transactions) {
+            res.send(transactions)
+        }else {
+            res.json({error : "Account does not exist"})
+        }
+       
+    }
+    catch(err) {
+        res.send(err)
+    }
+}
+
 const accountExist = async (passport) => {
     const account = await accounts.findOne({passport : passport})
     return account
@@ -163,5 +179,6 @@ module.exports = {
     deposit,
     updateCredit,
     withdrawl,
-    transfer
+    transfer,
+    getClientTransactions
 }
