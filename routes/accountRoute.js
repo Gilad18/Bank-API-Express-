@@ -7,7 +7,7 @@ router.get('/', (req,res) => {
     controllers.getAll(req,res)
 }).get('/accounts/:passport' , (req , res) => {
    controllers.getAccountByPassport(req,res)
-}).post('/:passport' , (req,res) => {
+}).post('/:passport/:name' , (req,res) => {
    controllers.addNewAccount(req,res);
 }).put('/accounts/:passport/deposit/' , (req,res) => {
         controllers.deposit(req,res);
