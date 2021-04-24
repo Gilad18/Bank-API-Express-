@@ -25,12 +25,16 @@ table {
 .actionSection {
     width: 100%;
     height: 30%;
-    /* float: right;
-    position: relative;
-    bottom: 50%;
-    right: 20%; */
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px black solid
+}
+.trasnferAction{
+    width: 15rem;
+    float: left;
+    position: relative;
+    right: 20rem;
 }
 
 .transferPop input{
@@ -39,4 +43,11 @@ table {
 .transferPop button{
   float: right;
   margin-top: 5%;
+}
+
+.messageOut {
+    position: absolute;
+    right: 5rem;
+    top: 13rem;
+    font-weight: bold;
 }

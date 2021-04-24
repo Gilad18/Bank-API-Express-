@@ -11,6 +11,26 @@ a {
    text-decoration: none;
 }
 
+.message {
+   position: absolute;
+   left: 30%;
+}
+
+.searchBAr {
+   width: 50vw;
+   margin: 10px auto;
+}
+.searchBAr input {
+   width: 50%;
+}
+
+.filterBar {
+   width: 30vw;
+   margin: 10px auto;
+}
+.filterBar input {
+   width: 50%;
+}
 .newUserSection {
    width: 20%;
    height: 40%;

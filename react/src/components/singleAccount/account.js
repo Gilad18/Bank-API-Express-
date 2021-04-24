@@ -23,14 +23,13 @@ export default function Account() {
             const getData = await axios.get(`http://bank-gilad.herokuapp.com/api/accounts/${passport}`);
             setAccount(getData.data)
             const getTrans = await axios.get(`http://bank-gilad.herokuapp.com/api/accounts/${passport}/transactions`)
-            setTransactions(getTrans.data)
+            setTransactions(getTrans.data) 
     }
-    search();
-    },[transaction])
+    search()
+    },[transaction,passport])
+
 
     const applyAction = async () => {
-        console.log(action)
-        console.log(amount)
         const confirm = await axios({
             method: 'put',
             url: `http://bank-gilad.herokuapp.com/api/accounts/${passport}/${action}`,
@@ -40,8 +39,10 @@ export default function Account() {
         })
         const kind = Object.keys(confirm.data)
         const text = Object.values(confirm.data)
-        setMessage(`${kind[0].toUpperCase()}!, ${text[0]}`)
-        
+        setMessage(`${kind[0].toUpperCase()}! ${text[0]}`) 
+        setTimeout(() => {
+            setMessage('')
+        }, 3500);       
     }
 
     const applyTransfer = async () => {
@@ -56,6 +57,10 @@ export default function Account() {
         const kind = Object.keys(confirm.data)
         const text = Object.values(confirm.data)
         setMessage(`${kind[0].toUpperCase()}!, ${text[0]}`)
+        setTimeout(() => {
+            setMessage('')
+        }, 3500); 
+    
     }
 
     return (
@@ -63,10 +68,10 @@ export default function Account() {
             <div className="upperPageSingle">
                 <div className="accountInfo">
             <Link to={'/'}>Back</Link>
-           <h2>Name :{account.name}</h2>
-           <h2>Account :{account.passport}</h2>
-           <h5>Line Of Credit :{account.credit}</h5>
-           <h1>Balance :{account.balance}</h1>
+           <h2>Name: {account.name}</h2>
+           <h2>Account: {account.passport}</h2>
+           <h5>Line Of Credit: {account.credit}</h5>
+           <h1>Balance: <span style={account.balance>=0?{color:'green'}:{color:'red'}}>{Number.parseFloat(account.balance).toFixed(2)}</span> ILS</h1>
            </div>
            <div className="accountActions">
            <div className="actionSection">
@@ -84,13 +89,13 @@ export default function Account() {
                    <Button name="Apply" onClick={applyTransfer}/>
                    </div>}
            </div>
-           <p style={{textAlign:'center'}}>{message}</p>
+           <p className="messageOut">{message}</p>
            </div>
            </div>
            <table>
                 <thead>
                     <tr>
-                        <th>Transacion ID</th>
+                        <th>Transaction ID</th>
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Date</th>
