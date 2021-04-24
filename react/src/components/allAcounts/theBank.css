@@ -1,5 +1,27 @@
+body {
+   background-color: cornflowerblue;
+}
 .upperPage{
    width: 100vw;
-   height: 25vh;
+   height: 30vh;
    background-color: cornflowerblue;
+   border-bottom : 5px white solid
+}
+a {
+   text-decoration: none;
+}
+
+.newUserSection {
+   width: 20%;
+   height: 40%;
+   margin-left: 5%;
+}
+.newUserSection input {
+   width: 90%;
+}
+
+.newUserSection button{
+  float: right;
+  margin-top: 4%;
+
 }

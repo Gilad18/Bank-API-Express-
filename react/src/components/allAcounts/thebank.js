@@ -21,17 +21,20 @@ export default function Thebank() {
 
         const createNewAccount = async () => {
             console.log(newPassport);
-            const newAccount=  await axios.post(`http://bank-gilad.herokuapp.com/api/${newPassport}` ,{ name:newName});
+            const newAccount=  await axios.post(`http://bank-gilad.herokuapp.com/api/${newPassport}/${newName}`)
             console.log(newAccount)
         }
        
     return (
         <div>
             <div className="upperPage">
-            <h1>Welcome, Mr. Manager</h1>
+            <h1 style={{textAlign:'center'}}>Welcome, Mr. Manager</h1>
+            <div className="newUserSection">
+                <h3>Create New Account:</h3>
             <Input name="Passport:" type="text" onChange={(e) => setNewPassport(e.target.value)}/>
             <Input name="Name:" type="text" onChange={(e)=> setNewName(e.target.value)}/>
             <Button name="Add New Account" onClick={createNewAccount}/>
+            </div>
             </div>
             <table>
                 <thead>

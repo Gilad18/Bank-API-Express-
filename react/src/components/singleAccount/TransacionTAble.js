@@ -11,7 +11,7 @@ export default function TransacionTAble({data}) {
                              <td>{item.action}</td>
                              <td>{item.amount}</td>
                              <td>{item.dateAdd}</td>
-                             <td>/Comments/</td>
+                             <td style={{color:'black'}}>{item.comments}</td>
                         </tr>
                     })}
                 </tbody>

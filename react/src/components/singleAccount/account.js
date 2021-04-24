@@ -14,6 +14,8 @@ export default function Account() {
     const [action , setAction] = useState('')
     const [amount , setAmount] = useState('')
     const [message , setMessage] = useState('')
+    const [trasfer , setTransfer] = useState(false)
+    const [reciver , setReciver] = useState('')
 
     
     useEffect(() => {
@@ -24,7 +26,7 @@ export default function Account() {
             setTransactions(getTrans.data)
     }
     search();
-    },[])
+    },[transaction])
 
     const applyAction = async () => {
         console.log(action)
@@ -39,6 +41,21 @@ export default function Account() {
         const kind = Object.keys(confirm.data)
         const text = Object.values(confirm.data)
         setMessage(`${kind[0].toUpperCase()}!, ${text[0]}`)
+        
+    }
+
+    const applyTransfer = async () => {
+        const confirm = await axios({
+            method: 'put',
+            url: `http://bank-gilad.herokuapp.com/api/accounts/${passport}/transfer`,
+            data: {
+                toAccount : reciver,
+                amount : amount
+            }
+        })
+        const kind = Object.keys(confirm.data)
+        const text = Object.values(confirm.data)
+        setMessage(`${kind[0].toUpperCase()}!, ${text[0]}`)
     }
 
     return (
@@ -46,6 +63,7 @@ export default function Account() {
             <div className="upperPageSingle">
                 <div className="accountInfo">
             <Link to={'/'}>Back</Link>
+           <h2>Name :{account.name}</h2>
            <h2>Account :{account.passport}</h2>
            <h5>Line Of Credit :{account.credit}</h5>
            <h1>Balance :{account.balance}</h1>
@@ -57,6 +75,14 @@ export default function Account() {
            <Input type="radio" group="Actions" name="Update Credit" value="credit" onChange={(e) => setAction(e.target.value)} />
            <Input type="number" name="Amount:" onChange={(e) => setAmount(e.target.value)}/>
            <Button name="Apply" onClick={applyAction}/>
+           </div>
+           <div className="trasnferAction">
+               <Input type="checkbox" name="Trasfer Between Account" onChange={(e)=> setTransfer(!trasfer)}></Input>
+               {trasfer && <div className="transferPop">
+                   <Input type="text" name="To Account: " onChange={(e)=> setReciver(e.target.value)}/>
+                   <Input type="Number" name="Amount: "onChange={(e) => setAmount(e.target.value)}/>
+                   <Button name="Apply" onClick={applyTransfer}/>
+                   </div>}
            </div>
            <p style={{textAlign:'center'}}>{message}</p>
            </div>
@@ -73,6 +99,7 @@ export default function Account() {
                 </thead>
             <Table data={transaction}/>
             </table>
+            {transaction.length ===0 && <h3 style={{textAlign:'center'}}>No Trasactions yet for this account</h3>}
         </div>
     )
 }
