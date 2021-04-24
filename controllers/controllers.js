@@ -180,6 +180,7 @@ const transfer = async (req,res) => {
     } else { return res.json({error : "Amount must be with a positive value"})}
 }
 
+
 module.exports = {
     getAll,
     getAccountByPassport,
