@@ -4,11 +4,10 @@ const transacions = require('../model/trasactions.model')
 
 const addNewAccount = async (req, res) => {
      if(req.params.passport.length > 5) {
-         const {theName} = req.body 
-         if (theName.length<2) {
+         if (req.params.name.length<2) {
             const newAccount = new accounts({
                 passport : req.params.passport,
-                name :theName
+                name :req.params.name
              });
          
              try {

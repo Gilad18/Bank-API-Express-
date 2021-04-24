@@ -9,6 +9,7 @@ export default function Thebank() {
       
         const [data,setData] = useState([])
         const [newPassport, setNewPassport] = useState('')
+        const [newName , setNewName] =useState ('')
         
         useEffect(() => {
             const search = async () => {
@@ -20,7 +21,7 @@ export default function Thebank() {
 
         const createNewAccount = async () => {
             console.log(newPassport);
-            const newAccount=  await axios.post(`http://bank-gilad.herokuapp.com/api/${newPassport}`);
+            const newAccount=  await axios.post(`http://bank-gilad.herokuapp.com/api/${newPassport}` ,{ name:newName});
             console.log(newAccount)
         }
        
@@ -29,6 +30,7 @@ export default function Thebank() {
             <div className="upperPage">
             <h1>Welcome, Mr. Manager</h1>
             <Input name="Passport:" type="text" onChange={(e) => setNewPassport(e.target.value)}/>
+            <Input name="Name:" type="text" onChange={(e)=> setNewName(e.target.value)}/>
             <Button name="Add New Account" onClick={createNewAccount}/>
             </div>
             <table>

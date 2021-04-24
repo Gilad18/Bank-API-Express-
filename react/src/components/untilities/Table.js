@@ -9,7 +9,7 @@ export default function Table({data}) {
                     {data.map((item,index) => {
                         return <tr key={index}>
                              <td>{item.passport}</td>
-                             <td>/NAME/</td>
+                             <td>{item.name}</td>
                              <td>{item.credit}</td>
                              <td style={item.balance>=0?{color:'green'}:{color:'red'}}>{item.balance}</td>
                              <td><Link to={`/account/${item.passport}`}>MORE</Link></td>
