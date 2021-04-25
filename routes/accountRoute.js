@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const dataJSON = require('../accounts.json');
 const controllers = require('../controllers/controllers')
 
 router.get('/', (req,res) => {
@@ -21,6 +20,10 @@ router.get('/', (req,res) => {
     controllers.getClientsByAmount(req,res)
 }).get('/accounts/:passport/transactions/' , (req,res) => {
     controllers.getClientTransactions(req,res)
+}).delete('/accounts/:passport/delete' , (req,res)=> {
+    controllers.deleteAccount(req,res)
+}).post('/login' , (req,res) => {
+    controllers.loginUser(req,res)
 })
 
 module.exports = router;

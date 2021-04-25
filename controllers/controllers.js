@@ -2,12 +2,25 @@ const accounts = require('../model/account.model')
 const transacions = require('../model/trasactions.model')
 
 
+const loginUser = async (req,res) => {
+     const {passport,password} =  req.body
+     try {
+          const user = await accounts.findByCredentials(passport,password)
+          res.send(user)
+     } 
+     catch(err) {
+        res.status(400).json({error : "Incorrect Inputs"})
+     }
+   
+}
 const addNewAccount = async (req, res) => {
+    const {password} = req.body
      if(req.params.passport.length > 5) {
          if (req.params.name.length>2) {
             const newAccount = new accounts({
                 passport : req.params.passport,
-                name :req.params.name
+                name :req.params.name,
+                password : password
              });
          
              try {
@@ -15,7 +28,7 @@ const addNewAccount = async (req, res) => {
                 res.status(200).json({success: "New Account was Succesfully created"})
              } 
              catch (err){
-                 res.json({"error" : err})
+                 res.json({err : 'err'})
              }
          }  else {return res.json({error : "Please insert a valid name"})}
        
@@ -180,6 +193,21 @@ const transfer = async (req,res) => {
     } else { return res.json({error : "Amount must be with a positive value"})}
 }
 
+const deleteAccount = async (req ,res) => {
+    const askedAccount = req.params.passport
+    const exist = await accountExist(askedAccount);
+    if (exist) {
+        try {
+             await accounts.deleteOne({passport : askedAccount} , function(err,quesstion) {
+                 if (err) throw err;
+                 res.send(quesstion)
+             })
+        }
+         catch(err) {
+            res.send(err)
+        }
+    }
+}
 
 module.exports = {
     getAll,
@@ -189,5 +217,7 @@ module.exports = {
     updateCredit,
     withdrawl,
     transfer,
-    getClientTransactions
+    getClientTransactions,
+    deleteAccount,
+    loginUser
 }
