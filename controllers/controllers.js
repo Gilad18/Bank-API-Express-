@@ -28,14 +28,14 @@ const addNewAccount = async (req, res) => {
                  console.log(newAccount)
                 const token = await newAccount.generateToken()
                 await newAccount.save()
-                res.status(200).json({success: "New Account was Succesfully created"})
+                res.status(200).json({success: "New Account was Succesfully created" , token})
              } 
              catch (err){
                  res.json({err : 'err'})
              }
-         }  else {return res.json({error : "Please insert a valid name"})}
+         }  else {return res.status(400).json({error : "Please insert a valid name"})}
        
-     } else {return res.json({error : "Passport must be with a minimun of 6 digits"})}
+     } else {return res.status(400).json({error : "Passport must be with a minimun of 6 digits"})}
    
 }
 
