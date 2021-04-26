@@ -10,7 +10,7 @@ const loginUser = async (req,res) => {
           res.status(200).json({success: "Yoou now logged in" , token})
      } 
      catch(err) {
-        res.status(400).json({error : "Incorrect Inputs"})
+        res.status(200).json({error : "Incorrect Inputs"})
      }
    
 }
