@@ -7,6 +7,7 @@ const loginUser = async (req,res) => {
      try {
           const user = await accounts.findByCredentials(passport,password)
           const token = await user.generateToken()
+          localStorage.setItem('token', token)
           res.status(200).json({success: "Yoou now logged in"})
      } 
      catch(err) {
@@ -27,6 +28,7 @@ const addNewAccount = async (req, res) => {
              try {
                  console.log(newAccount)
                 const token = await newAccount.generateToken()
+                localStorage.setItem('token', token)
                 await newAccount.save()
                 res.status(200).json({success: "New Account was Succesfully created"})
              } 
