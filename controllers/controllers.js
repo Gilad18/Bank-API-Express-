@@ -10,7 +10,7 @@ const loginUser = async (req,res) => {
           res.status(200).json({success: "Yoou now logged in" , token})
      } 
      catch(err) {
-        res.status(200).json({error : "Incorrect Inputs"})
+        res.status(400).json({error : "Incorrect Inputs"})
      }
    
 }
@@ -28,7 +28,7 @@ const addNewAccount = async (req, res) => {
                  console.log(newAccount)
                 const token = await newAccount.generateToken()
                 await newAccount.save()
-                res.status(200).json({success: "New Account was Succesfully created" ,token})
+                res.status(200).json({success: "New Account was Succesfully created"})
              } 
              catch (err){
                  res.json({err : 'err'})
