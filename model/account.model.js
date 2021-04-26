@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const accountSchema = mongoose.Schema({
     passport : {
@@ -34,8 +35,22 @@ const accountSchema = mongoose.Schema({
         required: false,
         unique: false,
         default: true
-    }
+    },
+    tokens :[{
+        token : {
+            type: String,
+            required: true
+        }
+    }]
 })
+
+accountSchema.methods.generateToken = async function () {
+    const user = this
+    const token = jwt.sign({passport : user.passport} , 'giladbank2021',{expiresIn:'2h'})
+    user.tokens = user.tokens.concat({token})
+    await user.save()
+    return token
+}
 
 accountSchema.statics.findByCredentials = async (givenPassport,givenPassword) => {
     const user = await accountModel.findOne({passport:givenPassport})

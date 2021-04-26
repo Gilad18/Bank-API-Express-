@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 const cors = require('cors');
 const app = express();
 app.use(cors());
+
 
 const accountRoute = require('./routes/accountRoute');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +29,6 @@ app.get('/',(req,res)=>{
 })
 
 
-app.listen(process.env.PORT || 5000, () => {
+app.listen(process.env.PORT || 3500, () => {
     console.log(`application start`);
 })

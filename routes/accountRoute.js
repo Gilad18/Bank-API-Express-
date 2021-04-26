@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers/controllers')
+const auth = require('../middleware/auth')
 
-router.get('/', (req,res) => {
+router.get('/', auth , (req,res) => {
     controllers.getAll(req,res)
-}).get('/accounts/:passport' , (req , res) => {
+}).get('/accounts/:passport' ,auth, (req , res) => {
    controllers.getAccountByPassport(req,res)
 }).post('/:passport/:name' , (req,res) => {
    controllers.addNewAccount(req,res);

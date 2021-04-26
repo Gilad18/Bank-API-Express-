@@ -6,7 +6,8 @@ const loginUser = async (req,res) => {
      const {passport,password} =  req.body
      try {
           const user = await accounts.findByCredentials(passport,password)
-          res.send(user)
+          const token = await user.generateToken()
+          res.status(200).json({success: "Yoou now logged in"})
      } 
      catch(err) {
         res.status(400).json({error : "Incorrect Inputs"})
@@ -24,6 +25,8 @@ const addNewAccount = async (req, res) => {
              });
          
              try {
+                 console.log(newAccount)
+                const token = await newAccount.generateToken()
                 await newAccount.save()
                 res.status(200).json({success: "New Account was Succesfully created"})
              } 
