@@ -30,5 +30,5 @@ app.get('/',(req,res)=>{
 
 
 app.listen(process.env.PORT || 3500, () => {
-    console.log(`application start`);
+   return console.log(`application start`);
 })
